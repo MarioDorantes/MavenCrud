@@ -31,7 +31,7 @@ public class Interfaz extends javax.swing.JFrame {
             ConexionBD conn = new ConexionBD();
             Connection con = conn.conectar();
             
-            String sql = "SELECT primer_nom, seg_nom, primer_ape, seg_ape FROM ESTUDIANTE";
+            String sql = "SELECT primer_nom, seg_nom, primer_ape, seg_ape FROM ESTUDIANTE WHERE estatus = 'Activo'";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             
@@ -170,10 +170,16 @@ public class Interfaz extends javax.swing.JFrame {
             if(Fila >= 0){
                 int res = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar este registro?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
                 if(res == 0){
-                    String nombreEstudiante = jtTablaEstudiantes.getValueAt(Fila, 0).toString();
+                    String nombreUnoEstudiante = jtTablaEstudiantes.getValueAt(Fila, 0).toString();
+                    String nombreDosEstudiante = jtTablaEstudiantes.getValueAt(Fila, 1).toString();
+                    String ApellidoUno = jtTablaEstudiantes.getValueAt(Fila, 2).toString();
+                    String ApellidoDos = jtTablaEstudiantes.getValueAt(Fila, 3).toString();
             
-                    ps = conn.prepareStatement("DELETE FROM ESTUDIANTE WHERE primer_nom = ?");
-                    ps.setString(1, nombreEstudiante);
+                    ps = conn.prepareStatement("UPDATE ESTUDIANTE SET ESTATUS = 'Inactivo' WHERE primer_nom = ? AND seg_nom = ? AND primer_ape = ? AND seg_ape = ?");
+                    ps.setString(1, nombreUnoEstudiante);
+                    ps.setString(2, nombreDosEstudiante);
+                    ps.setString(3, ApellidoUno);
+                    ps.setString(4, ApellidoDos);
                     ps.execute();
             
                     modelo.removeRow(Fila);
