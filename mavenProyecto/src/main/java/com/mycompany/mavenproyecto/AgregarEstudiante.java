@@ -145,7 +145,7 @@ public class AgregarEstudiante extends javax.swing.JFrame {
             camposLlenos = false;
         }
         if(segundoNombre.length() == 0){
-            camposLlenos = false;
+            segundoNombre = "";
         }
         if(primerApellido.length() == 0){
             camposLlenos = false;

@@ -20,9 +20,10 @@ public class Interfaz extends javax.swing.JFrame {
         
     }
     
+    DefaultTableModel modelo = new DefaultTableModel();
+    
     private void obtenerEstudiantes(){
         try{
-            DefaultTableModel modelo = new DefaultTableModel();
             jtTablaEstudiantes.setModel(modelo);
             
             PreparedStatement ps = null;
@@ -159,7 +160,32 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+        PreparedStatement ps = null;
+        try{
+            ConexionBD objCon = new ConexionBD();
+            Connection conn = objCon.conectar();
+            
+            int Fila = jtTablaEstudiantes.getSelectedRow();
+            
+            if(Fila >= 0){
+                int res = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar este registro?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+                if(res == 0){
+                    String nombreEstudiante = jtTablaEstudiantes.getValueAt(Fila, 0).toString();
+            
+                    ps = conn.prepareStatement("DELETE FROM ESTUDIANTE WHERE primer_nom = ?");
+                    ps.setString(1, nombreEstudiante);
+                    ps.execute();
+            
+                    modelo.removeRow(Fila);
+                }
+                
+            } else{
+                JOptionPane.showMessageDialog(null, "Seleccione un registro para poder eliminarlo", "Sin selección", JOptionPane.ERROR_MESSAGE);
+            }
+    
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al eliminar de la BD"+ex, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
