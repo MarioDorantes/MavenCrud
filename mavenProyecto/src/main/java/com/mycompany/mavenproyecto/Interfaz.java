@@ -213,10 +213,12 @@ public class Interfaz extends javax.swing.JFrame {
             if(Fila >= 0){
                 String nomUno = jtTablaEstudiantes.getValueAt(Fila, 0).toString();
                 String nomDos = jtTablaEstudiantes.getValueAt(Fila, 1).toString();
+                String apeUno = jtTablaEstudiantes.getValueAt(Fila, 2).toString();
             
-                ps = conn.prepareStatement("SELECT primer_nom, seg_nom, primer_ape, seg_ape FROM ESTUDIANTE WHERE primer_nom = ? AND seg_nom = ?");
+                ps = conn.prepareStatement("SELECT primer_nom, seg_nom, primer_ape, seg_ape FROM ESTUDIANTE WHERE primer_nom = ? AND seg_nom = ? AND primer_ape = ?");
                 ps.setString(1, nomUno);
                 ps.setString(2, nomDos);
+                ps.setString(3, apeUno);
                 rs = ps.executeQuery();
             
             

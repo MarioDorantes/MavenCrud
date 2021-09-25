@@ -27,9 +27,8 @@ public class ConexionBD {
             
             conn = DriverManager.getConnection(url, usuario, password);
 
-            // Do something with the Connection
             if (conn != null){
-                System.out.println("Conectado");
+                System.out.println("Conectado a la base de datos...");
             }             
             
         } catch (SQLException ex) {

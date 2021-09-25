@@ -1,6 +1,7 @@
 package com.mycompany.mavenproyecto;
 
-import com.mycompany.DAO.EstudianteDAO;
+import com.mycompany.ConexionBD.ConexionBD;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 /**
@@ -156,8 +157,20 @@ public class AgregarEstudiante extends javax.swing.JFrame {
         }
         
         if(camposLlenos){
-            EstudianteDAO estudianteDao = new EstudianteDAO();
-            estudianteDao.agregarEstudiante(primerNombre, segundoNombre, primerApellido, segundoApellido, estatus);
+            
+            ConexionBD conn = new ConexionBD();
+            try {
+                Connection conexion = conn.conectar();
+                java.sql.Statement st = conexion.createStatement();
+                String sql = "INSERT INTO ESTUDIANTE (primer_nom, seg_nom, primer_ape, seg_ape, estatus) VALUES ('" + primerNombre + "', '" + segundoNombre + "', '" + primerApellido + "', '" + segundoApellido + "', '" + estatus + "');";
+                st.execute(sql);
+                st.close();
+                conexion.close();
+                JOptionPane.showMessageDialog(null, "Estudiante registrado exitosamente", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Registro fallido" + ex, "Falla en el registro", JOptionPane.ERROR_MESSAGE);
+            }
+
             salir();
         } else {
             JOptionPane.showMessageDialog(null, "Favor de llenar los campos", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
