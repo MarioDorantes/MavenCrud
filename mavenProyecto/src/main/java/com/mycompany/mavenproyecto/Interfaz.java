@@ -82,6 +82,11 @@ public class Interfaz extends javax.swing.JFrame {
         });
 
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -193,6 +198,55 @@ public class Interfaz extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al eliminar de la BD"+ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try{
+            ConexionBD objCon = new ConexionBD();
+            Connection conn = objCon.conectar();
+            
+            int Fila = jtTablaEstudiantes.getSelectedRow();
+            
+            if(Fila >= 0){
+                String nomUno = jtTablaEstudiantes.getValueAt(Fila, 0).toString();
+                String nomDos = jtTablaEstudiantes.getValueAt(Fila, 1).toString();
+            
+                ps = conn.prepareStatement("SELECT primer_nom, seg_nom, primer_ape, seg_ape FROM ESTUDIANTE WHERE primer_nom = ? AND seg_nom = ?");
+                ps.setString(1, nomUno);
+                ps.setString(2, nomDos);
+                rs = ps.executeQuery();
+            
+            
+                String auxNomUno = "";
+                String auxNomDos = "";
+                String auxApeUno = "";
+                String auxApeDos = "";
+            
+            
+                while (rs.next()){
+                    auxNomUno = rs.getString("primer_nom");
+                    auxNomDos = rs.getString("seg_nom");
+                    auxApeUno = rs.getString("primer_ape");
+                    auxApeDos = rs.getString("seg_ape");
+                }
+
+                ModificarEstudiante modificar = new ModificarEstudiante();
+                modificar.setVisible(true);
+                dispose();
+            
+                modificar.llenarCampos(auxNomUno, auxNomDos, auxApeUno, auxApeDos);
+            } else{
+                JOptionPane.showMessageDialog(null, "Seleccione un registro para poder editarlo", "Sin selección", JOptionPane.ERROR_MESSAGE);
+            }
+    
+        } catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al eliminar de la BD"+ex, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
      * @param args the command line arguments

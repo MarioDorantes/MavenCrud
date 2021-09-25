@@ -29,7 +29,7 @@ public class ConexionBD {
 
             // Do something with the Connection
             if (conn != null){
-                System.out.println("Conexion establecida");
+                System.out.println("Conectado");
             }             
             
         } catch (SQLException ex) {
