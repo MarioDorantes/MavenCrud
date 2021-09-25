@@ -5,6 +5,9 @@
  */
 package com.mycompany.mavenproyecto;
 
+import com.mycompany.ConexionBD.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,7 +23,17 @@ public class ModificarEstudiante extends javax.swing.JFrame {
         initComponents();
     }
     
+    String nomU = "";
+    String nomD = "";
+    String apeU = "";
+    String apeD = "";
+    
     public void llenarCampos(String nomUno, String nomDos, String apeUno, String apeDos){
+        nomU = nomUno;
+        nomD = nomDos;
+        apeU = apeUno;
+        apeD = apeDos;
+        
         txtPrimerNombre.setText(nomUno);
         txtSegundoNombre.setText(nomDos);
         txtPrimerApellido.setText(apeUno);
@@ -166,7 +179,26 @@ public class ModificarEstudiante extends javax.swing.JFrame {
 
         if(camposLlenos){
             
-            
+            PreparedStatement ps = null;
+            try{
+                
+                ConexionBD objCon = new ConexionBD();
+                Connection conn = objCon.conectar();
+                
+                ps = conn.prepareStatement("UPDATE ESTUDIANTE SET primer_nom = '"+primerNombre+"', seg_nom = '"+segundoNombre+"', primer_ape = '"+primerApellido+"', seg_ape = '"+segundoApellido+"' WHERE primer_nom = ? AND seg_nom = ? AND primer_ape = ? AND seg_ape = ?");
+                
+                ps.setString(1, nomU);
+                ps.setString(2, nomD);
+                ps.setString(3, apeU);
+                ps.setString(4, apeD);
+                ps.execute();
+                
+                JOptionPane.showMessageDialog(null, "Estudiante modificado exitosamente", "Modificación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                salir();
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Modificacion fallida"+ex, "Falla en la modificación", JOptionPane.ERROR_MESSAGE);
+            }
+
             
         } else {
             JOptionPane.showMessageDialog(null, "Favor de llenar los campos", "Campos Vacíos", JOptionPane.ERROR_MESSAGE);
